@@ -5,6 +5,9 @@
 import os
 import sys
 
+import numpy as np
+from sklearn.metrics import roc_auc_score
+
 # round float up to this number of characters after decimal point.
 round_chars = 5
 
@@ -56,16 +59,18 @@ def parse_file(file_path):
     return results
 
 
-def round_results(num_list, round_to=0):
+def convert_to_bin(num_list, threshold=0.6):
     """Rounds list of floats.
     :param num_list: List of floats.
-    :param round_to: Number of digits after the decimal point.
-    :return: Rounded list of floats.
+    :param threshold: Threshold to count float is 1 or 0.
+    :return: List of floats.
     """
     rounded = []
     for one in num_list:
-        num = round(one, round_to)
-        rounded.append(num)
+        if one > threshold:
+            rounded.append(1.0)
+        else:
+            rounded.append(0.0)
     return rounded
 
 
@@ -108,8 +113,28 @@ def count_harmonic_mean(precision, recall):
     return round((2 * precision * recall) / (precision + recall), round_chars)
 
 
-def main():
+def count_fpr(fp, tn):
+    """Counts 'False Positive Rate'.
+    :param fp: num of False Positive.
+    :param tn: num of True Negative.
+    :return: num
+    """
+    return round((fp / (fp + tn)), round_chars)
 
+
+def count_tpr(tp, fn):
+    """Counts 'True Positive Rate'.
+    :param tp: num of True Positive.
+    :param fn: num of False Negative.
+    :return: Num
+    """
+    return round((tp / (tp + fn)), round_chars)
+
+
+def get_answers_and_samples():
+    """Read and return floats from files.
+    :return: Two list of floats: samples, answers
+    """
     sample_file = get_args()['samples_file']
     answer_file = get_args()['answers_file']
 
@@ -119,28 +144,72 @@ def main():
     assert len(samples) == len(answers), (
         "Number of samples is not equal to the number of answers")
 
-    samples = round_results(samples)
-    answers = round_results(answers)
+    return samples, answers
+
+
+def convert_with_best_threshold():
+    """Get best threshold based on roc_auc_score. And convert to samples to bin
+    using it.
+    :return: float, list, list
+    """
+    thresholds = np.arange(0.01, 1.00, 0.01)
+
+    samples, answers = get_answers_and_samples()
+    answers = convert_to_bin(answers)
+
+    print 'Calculating best threshold . . .'
+    threshold_score = {}
+    for threshold in thresholds:
+        score = roc_auc_score(
+            answers,
+            convert_to_bin(samples, threshold=threshold))
+        score = round(score, round_chars)
+        threshold_score[score] = round(threshold, 2)
+
+    values = threshold_score.keys()
+    values.sort(reverse=True)
+    best_value = values[0]
+    best_threshold = threshold_score[best_value]
+    print 'Calculating best threshold . . . it is "{0}"'.format(best_threshold)
+
+    samples = convert_to_bin(samples, threshold=best_threshold)
+
+    return best_threshold, answers, samples
+
+
+def main():
+    sample_file = get_args()['samples_file']
+    answer_file = get_args()['answers_file']
+
+    best_threshold, answers, samples = convert_with_best_threshold()
 
     results = get_results(samples, answers)
 
-    precision = count_precision(results['TP'], results['FP'])
-    recall = count_recall(results['TP'], results['FN'])
+    precision = count_precision(tp=results['TP'], fp=results['FP'])
+    recall = count_recall(tp=results['TP'], fn=results['FN'])
     harmonic_mean = count_harmonic_mean(precision, recall)
+
+    tpr = count_tpr(tp=results['TP'], fn=results['FN'])
+    fpr = count_fpr(fp=results['FP'], tn=results['TN'])
 
     print (
         "\nResults:\n"
         "File with samples: {sample_file}\n"
-        "File with answers: {answer_file}\n"
-        "---\n"
+        "File with answers: {answer_file}\n\n"
         "Precision: {precision}\n"
         "Recall:    {recall}\n"
-        "Harmonic mean of Precision and Recall = {hm}\n"
+        "Harmonic mean of Precision and Recall = {hm}\n\n"
+        "Threshold: {threshold}\n"
+        "True Positive Rate: {tpr}\n"
+        "False Positive Rate: {fpr}\n"
     ).format(sample_file=sample_file,
              answer_file=answer_file,
              precision=precision,
              recall=recall,
-             hm=harmonic_mean)
+             hm=harmonic_mean,
+             threshold=best_threshold,
+             fpr=fpr,
+             tpr=tpr)
 
 
 if __name__ == "__main__":
