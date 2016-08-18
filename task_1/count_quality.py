@@ -167,8 +167,7 @@ def convert_with_best_threshold():
         threshold_score[score] = round(threshold, 2)
 
     values = threshold_score.keys()
-    values.sort(reverse=True)
-    best_value = values[0]
+    best_value = max(values)
     best_threshold = threshold_score[best_value]
     print 'Calculating best threshold . . . it is "{0}"'.format(best_threshold)
 
