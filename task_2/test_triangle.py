@@ -23,7 +23,7 @@ class TestTriangle(object):
     round_to = 3
 
     def is_points_ok(self, **kwargs):
-        """Check that there each point is unique.
+        """Checks if each point is unique.
         :param kwargs: Dict with coordinates.
         :return: Boolean.
         """
@@ -55,6 +55,7 @@ class TestTriangle(object):
         """
         sides = [AB, AC, BC]
         sides.sort()
+        # c= length of the hypotenuse; a,b= lengths of the other two sides.
         a, b, c = sides
         return (
             round((a ** 2 + b ** 2), self.round_to) ==
@@ -136,11 +137,11 @@ class TestTriangle(object):
 
         assert (pifagor is True and
                 90 in angles), (
-            "According Pythagorean theorem this triangle is not right.\n"
+            "\nAccording Pythagorean theorem this triangle is not right.\n"
             "Also there are no 90 degrees angle in this triangle")
 
     def test_find_coordinates_for_right_triangle(self):
-        """Find coordinates of right triangle"""
+        """Find coordinates of a right triangle"""
 
         i = 0
         while True:
@@ -169,7 +170,8 @@ class TestTriangle(object):
                 BC=sides[2])
 
             if pifagor is True and 90 in angles:
-                print ("\nIt tooks {0} rounds to find coordinates for the "
+
+                print ("\nIt took {0} rounds to find coordinates for the "
                        "right triangle:").format(i)
                 print "Point A = ({0}, {1})".format(coords['X1'], coords['Y1'])
                 print "Point B = ({0}, {1})".format(coords['X2'], coords['Y2'])
