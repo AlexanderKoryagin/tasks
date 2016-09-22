@@ -16,3 +16,5 @@
 
 https://habrahabr.ru/company/yandex/blog/242795/
 https://pypi.python.org/pypi/pytest-allure-adaptor
+
+Requirement.parse('pytest<=2.9.0
