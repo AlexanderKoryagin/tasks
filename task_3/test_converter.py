@@ -10,24 +10,66 @@ from selenium.webdriver.common.by import By
 import pytest
 
 
-class ConverterPage(object):
-
-    driver = webdriver.Firefox()
-
-    converter_url = 'http://www.sberbank.ru/ru/quotes/converter'
-    currency_list = ['RUR', 'USD', 'CAD', 'EUR', 'JPY', 'CHF', 'AUD', 'GBP']
-    timeout = 15  # seconds
+class Locators(object):
 
     locator_filter_block_css = 'div.rates-aside-filter.rates-container'
     locator_widgets_class = 'widget-rates'
     locator_convert_block_css = 'div.filter-block.filter-block-converter'
     locator_num_input_xpath = u"//input[@placeholder='Сумма']"
+
+    locator_show_button_xpath = u"//button[contains(text(),'Показать')]"
+    locator_results_css = 'div.converter-result'
+
     locator_currency_selector_block_class = 'select'
     locator_currency_dropdown_css = "div[class='select opened']"
     locator_currency_in_dropdown_xpath = (
         "//div[@class='visible']/span[contains(text(), '{currency}')]")
-    locator_show_button_xpath = u"//button[contains(text(),'Показать')]"
-    locator_results_css = 'div.converter-result'
+
+    locator_source_block_xpath = (
+        "//div[@class='filter-block' and @data-reactid='.s.$1.$0.1']")
+    locator_source_block_radio_sber_card_xpath = (
+        "//span[@class='radio' and @data-reactid='.s.$1.$0.1.1:$0.1']")
+    locator_source_block_radio_bank_account_xpath = (
+        "//span[@class='radio' and @data-reactid='.s.$1.$0.1.1:$1.1']")
+    locator_source_block_radio_cash_xpath = (
+        "//span[@class='radio' and @data-reactid='.s.$1.$0.1.1:$2.1']")
+
+    Locator_receipt_block_xpath = (
+        "//div[@class='filter-block' and @data-reactid='.s.$1.$0.2']")
+    locator_receipt_block_radio_to_card_xpath = (
+        "//span[@class='radio' and @data-reactid='.s.$1.$0.2.1:$0.1']")
+    locator_receipt_block_radio_to_bank_account_xpath = (
+        "//span[@class='radio' and @data-reactid='.s.$1.$0.2.1:$1.1']")
+    locator_receipt_block_radio_cash_xpath = (
+        "//span[@class='radio' and @data-reactid='.s.$1.$0.2.1:$2.1']")
+
+    locator_exchange_method_block_xpath = (
+        "//div[@class='filter-block' and @data-reactid='.s.$1.$0.3']")
+    locator_exchange_method_block_radio_internet_bank_xpath = (
+        "//span[@class='radio' and @data-reactid='.s.$1.$0.3.1:$0.1']")
+    locator_exchange_method_block_radio_bank_office_xpath = (
+        "//span[@class='radio' and @data-reactid='.s.$1.$0.3.1:$1.1']")
+    locator_exchange_method_block_radio_atm_xpath = (
+        "//span[@class='radio' and @data-reactid='.s.$1.$0.3.1:$2.1']")
+
+    locator_time_block_xpath = (
+        "//div[@class='filter-block' and @data-reactid='.s.$1.$0.5']")
+    locator_time_block_radio_now_xpath = (
+        "//span[@class='radio' and @data-reactid='.s.$1.$0.5.1:$0.1']")
+    locator_time_block_radio_choose_xpath = (
+        "//span[@class='radio' and @data-reactid='.s.$1.$0.5.1:$1.1']")
+    locator_time_block_datepicker_css = (
+        "div[class='filter-datepicker input']")
+
+
+class ConverterPage(Locators):
+
+    driver = webdriver.Firefox()
+
+    converter_url = 'http://www.sberbank.ru/ru/quotes/converter'
+    # not all variants, just basic
+    currency_list = ['RUR', 'USD', 'CAD', 'EUR', 'JPY', 'CHF', 'AUD', 'GBP']
+    timeout = 15  # seconds
 
     def open_page(self):
         """Open page in browser and wait till it'll be loaded."""
@@ -53,6 +95,87 @@ class ConverterPage(object):
         convert_block = filter_block.find_element_by_css_selector(
             self.locator_convert_block_css)
         return convert_block
+
+    def source_block(self):
+        """Find block with source selector and it's buttons on page.
+        :return: dict with selenium objects
+        """
+        filter_block = self._filter_block()
+
+        source_block = filter_block.find_element_by_xpath(
+            self.locator_source_block_xpath)
+
+        radio_sber_card = source_block.find_element_by_xpath(
+            self.locator_source_block_radio_sber_card_xpath)
+        radio_bank_account = source_block.find_element_by_xpath(
+            self.locator_source_block_radio_bank_account_xpath)
+        radio_cash = source_block.find_element_by_xpath(
+            self.locator_source_block_radio_cash_xpath)
+
+        return {'radio_sber_card': radio_sber_card,
+                'radio_bank_account': radio_bank_account,
+                'radio_cash': radio_cash,
+                'source_block': source_block}
+
+    def receipt_block(self):
+        """Find block with receipt selector and it's buttons on page.
+        :return: dict with selenium objects
+        """
+        filter_block = self._filter_block()
+
+        receipt_block = filter_block.find_element_by_xpath(
+            self.Locator_receipt_block_xpath)
+
+        radio_to_card = receipt_block.find_element_by_xpath(
+            self.locator_receipt_block_radio_to_card_xpath)
+        radio_to_bank_account = receipt_block.find_element_by_xpath(
+            self.locator_receipt_block_radio_to_bank_account_xpath)
+        radio_cash = receipt_block.find_element_by_xpath(
+            self.locator_receipt_block_radio_cash_xpath)
+
+        return {'radio_to_card': radio_to_card,
+                'radio_to_bank_account': radio_to_bank_account,
+                'radio_cash': radio_cash,
+                'receipt_block': receipt_block}
+
+    def exchange_method_block(self):
+        """Find block with exchange method selector and it's buttons on page.
+        :return: dict with selenium objects
+        """
+        filter_block = self._filter_block()
+
+        exchange_method_block = filter_block.find_element_by_xpath(
+            self.locator_exchange_method_block_xpath)
+
+        radio_internet_bank = exchange_method_block.find_element_by_xpath(
+            self.locator_exchange_method_block_radio_internet_bank_xpath)
+        radio_bank_office = exchange_method_block.find_element_by_xpath(
+            self.locator_exchange_method_block_radio_bank_office_xpath)
+        radio_atm = exchange_method_block.find_element_by_xpath(
+            self.locator_exchange_method_block_radio_atm_xpath)
+
+        return {'radio_internet_bank': radio_internet_bank,
+                'radio_bank_office': radio_bank_office,
+                'radio_atm': radio_atm,
+                'exchange_method_block': exchange_method_block}
+
+    def time_block(self):
+        """Find block with time selector and it's buttons on page.
+        :return: dict with selenium objects
+        """
+        filter_block = self._filter_block()
+
+        time_block = filter_block.find_element_by_xpath(
+            self.locator_time_block_xpath)
+
+        radio_now = time_block.find_element_by_xpath(
+            self.locator_time_block_radio_now_xpath)
+        radio_choose = time_block.find_element_by_xpath(
+            self.locator_time_block_radio_choose_xpath)
+
+        return {'radio_now': radio_now,
+                'radio_choose': radio_choose,
+                'time_block': time_block}
 
     def set_num_to_convert(self, num_to_convert):
         """Set amount of money you want to convert.
@@ -143,6 +266,9 @@ class TestConverter(ConverterPage):
         self.driver.close()
 
     def read_csv(self):
+        """Read CSV file and convert it parameters for test.
+        :return: list
+        """
         params = []
         csv_file = 'params.csv'
         csv_file_path = os.path.join(
@@ -156,8 +282,9 @@ class TestConverter(ConverterPage):
                                row['Currency to']])
         return params
 
-    def test_1(self):
-        """
+    def test_converter_different_currencies(self):
+        """Test different currencies in converter.
+
         Actions:
         1. Read 'Money to convert', 'Currency from', 'Currency to' from CSV.
         2. Set value in converter.
@@ -166,6 +293,7 @@ class TestConverter(ConverterPage):
         5. Get results.
         6. Check content of results.
         """
+        # get params from csv file
         for param in self.read_csv():
             money, curr_from, curr_to = param
 
@@ -194,3 +322,65 @@ class TestConverter(ConverterPage):
                     'Currency not in results: {0} -> {1}\n'
                     'results: {2}'.format(curr_from, curr_to,
                                           results.encode('utf-8')))
+
+    def test_inactive_radiobuttons_in_exchange_method_block(self):
+        """Test that with some configuration some checkboxes became inactive.
+
+        Actions:
+        1. Enable 'cash' checkbox from 'source' block.
+        2. Enable 'cash' checkbox from 'receipt' block.
+        3. Check that in 'exchange method' block two radio-buttons are not
+        enabled.
+        """
+        not_active_boxes = (u'Интернет-банк', u'Банкомат / УС')
+
+        source_block = self.source_block()
+        receipt_block = self.receipt_block()
+
+        with pytest.allure.step("Enable 'cash' checkbox from 'source' block"):
+            source_block['radio_cash'].click()
+
+        with pytest.allure.step("Enable 'cash' checkbox from 'receipt' block"):
+            receipt_block['radio_cash'].click()
+
+        with pytest.allure.step("Get 'exchange method' block"):
+            exchange_method_block = self.exchange_method_block()
+            exchange_method_block = exchange_method_block[
+                'exchange_method_block']
+
+            inactve_elements = (exchange_method_block.
+                                find_elements_by_class_name('filter-inactive'))
+
+            inactve_elements_names = [x.text.strip() for x in inactve_elements]
+
+        with pytest.allure.step("Check that some elemens are not anabled"):
+            assert all(i in inactve_elements_names
+                       for i in not_active_boxes), (
+                "Some of the checkboxes are enabled")
+
+    def test_calendar_appears(self):
+        """Test that date-picker calendar appears if 'select' time pressed.
+
+        Actions:
+        1. In time block select current time.
+        2. Check that Date-picker is not present.
+        3. In time box select 'choose' time.
+        4. Check that Date-picker presents.
+        """
+        with pytest.allure.step("In time block select current time"):
+            self.time_block()['radio_now'].click()
+
+        with pytest.allure.step("Check that Date-picker is not present"):
+            assert not (self.time_block()['time_block'].
+                        find_elements_by_css_selector(
+                            self.locator_time_block_datepicker_css)), (
+                "Date-picker present, but it should not")
+
+        with pytest.allure.step("In time box select 'choose' time"):
+            self.time_block()['radio_choose'].click()
+
+        with pytest.allure.step("Check that Date-picker presents"):
+            assert (len(self.time_block()['time_block'].
+                        find_elements_by_css_selector(
+                            self.locator_time_block_datepicker_css)) == 1), (
+                "Date-picker does not present, but it should")

@@ -1,0 +1,3 @@
+# pytest  # will be installed with pytest-allure-adaptor
+selenium
+pytest-allure-adaptor
