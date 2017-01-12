@@ -4,11 +4,11 @@
 import csv
 import os
 
-from selenium import webdriver
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
 import pytest
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 
 
 class Locators(object):
@@ -82,6 +82,7 @@ class ConverterPage(Locators):
 
     def _filter_block(self):
         """Find filter block from page.
+
         :return: selenium object
         """
         filter_block = self.driver.find_element_by_css_selector(
@@ -90,6 +91,7 @@ class ConverterPage(Locators):
 
     def _convert_block(self):
         """Find block with converter from page.
+
         :return: selenium object
         """
         filter_block = self._filter_block()
@@ -99,6 +101,7 @@ class ConverterPage(Locators):
 
     def source_block(self):
         """Find block with source selector and it's buttons on page.
+
         :return: dict with selenium objects
         """
         filter_block = self._filter_block()
@@ -120,6 +123,7 @@ class ConverterPage(Locators):
 
     def receipt_block(self):
         """Find block with receipt selector and it's buttons on page.
+
         :return: dict with selenium objects
         """
         filter_block = self._filter_block()
@@ -141,6 +145,7 @@ class ConverterPage(Locators):
 
     def exchange_method_block(self):
         """Find block with exchange method selector and it's buttons on page.
+
         :return: dict with selenium objects
         """
         filter_block = self._filter_block()
@@ -162,6 +167,7 @@ class ConverterPage(Locators):
 
     def time_block(self):
         """Find block with time selector and it's buttons on page.
+
         :return: dict with selenium objects
         """
         filter_block = self._filter_block()
@@ -180,6 +186,7 @@ class ConverterPage(Locators):
 
     def set_num_to_convert(self, num_to_convert):
         """Set amount of money you want to convert.
+
         :param num_to_convert: int
         """
         if not isinstance(num_to_convert, int):
@@ -194,6 +201,7 @@ class ConverterPage(Locators):
 
     def set_currency_from_to(self, from_currency, to_currency):
         """Set currency conversion: FROM and TO.
+
         :param from_currency: short name of currency
         :param to_currency: short name of currency
         """
@@ -239,7 +247,7 @@ class ConverterPage(Locators):
         to_currency_in_dropdown.click()
 
     def click_apply_button(self):
-        """Find and click on Show button"""
+        """Find and click on Show button."""
         filter_block = self._filter_block()
         show_button = filter_block.find_element_by_xpath(
             self.locator_show_button_xpath)
@@ -247,6 +255,7 @@ class ConverterPage(Locators):
 
     def get_results(self):
         """Wait and find results of conversation.
+
         :return: text from results.
         """
         wait = WebDriverWait(self.driver, self.timeout)
@@ -268,6 +277,7 @@ class TestConverter(ConverterPage):
 
     def read_csv(self):
         """Read CSV file and convert it parameters for test.
+
         :return: list
         """
         params = []

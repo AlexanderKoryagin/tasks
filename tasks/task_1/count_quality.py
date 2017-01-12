@@ -13,7 +13,7 @@ round_chars = 5
 
 
 def usage():
-    """Prints usage"""
+    """Print usage."""
     print (
         "\n{delim}\n"
         "\nThis program will calculate quality of work of a classifier.\n"
@@ -31,6 +31,7 @@ def usage():
 
 def get_args():
     """Get args. Assume first arg is samples. Second- answers.
+
     :return: Dict with file names.
     """
     args = sys.argv[1:]
@@ -42,6 +43,7 @@ def get_args():
 
 def parse_file(file_path):
     """Read file and return only list of number-values in it.
+
     :param file_path: Path to file for parsing.
     :return: List of floats.
     """
@@ -61,7 +63,8 @@ def parse_file(file_path):
 
 
 def convert_to_bin(num_list, threshold=0.6):
-    """Rounds list of floats.
+    """Round list of floats.
+
     :param num_list: List of floats.
     :param threshold: Threshold to count float is 1 or 0.
     :return: List of floats.
@@ -76,7 +79,8 @@ def convert_to_bin(num_list, threshold=0.6):
 
 
 def get_results(samples, answers):
-    """Returns dict with type of error and it's count.
+    """Return dict with type of error and it's count.
+
     :param samples: List with samples
     :param answers: List with correct answers.
     :return: Dict like:
@@ -115,7 +119,8 @@ def count_harmonic_mean(precision, recall):
 
 
 def count_fpr(fp, tn):
-    """Counts 'False Positive Rate'.
+    """Count 'False Positive Rate'.
+
     :param fp: num of False Positive.
     :param tn: num of True Negative.
     :return: num
@@ -124,7 +129,8 @@ def count_fpr(fp, tn):
 
 
 def count_tpr(tp, fn):
-    """Counts 'True Positive Rate'.
+    """Count 'True Positive Rate'.
+
     :param tp: num of True Positive.
     :param fn: num of False Negative.
     :return: Num
@@ -134,6 +140,7 @@ def count_tpr(tp, fn):
 
 def get_answers_and_samples():
     """Read and return floats from files.
+
     :return: Two list of floats: samples, answers
     """
     sample_file = get_args()['samples_file']
@@ -149,8 +156,10 @@ def get_answers_and_samples():
 
 
 def convert_with_best_threshold():
-    """Get best threshold based on roc_auc_score. And convert to samples to bin
-    using it.
+    """Get best threshold based on roc_auc_score.
+
+    And convert to samples to bin using it.
+
     :return: float, list, list
     """
     thresholds = np.arange(0.01, 1.00, 0.01)

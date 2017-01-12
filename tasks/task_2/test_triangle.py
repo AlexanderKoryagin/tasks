@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+"""Test to checks if provided coordinates belongs to the Right triangle."""
 
 import math
 import random
@@ -6,6 +7,7 @@ import random
 
 def triangle_coordinates():
     """Generate 6 random int coordinates for 3 triangle points.
+
     :return: Dict with coordinates.
     """
     min_coord = -100
@@ -19,11 +21,13 @@ def triangle_coordinates():
 
 
 class TestTriangle(object):
+    """Test triangle."""
 
     round_to = 3
 
     def is_points_ok(self, **kwargs):
-        """Checks if each point is unique.
+        """Check if each point is unique.
+
         :param kwargs: Dict with coordinates.
         :return: Boolean.
         """
@@ -35,6 +39,7 @@ class TestTriangle(object):
 
     def calculate_len_of_sides(self, Xa, Ya, Xb, Yb, Xc, Yc):
         """Calculate len of triangle sides.
+
         :param : Coordinates of 3 points.
         :return: 3 float lens.
         """
@@ -47,7 +52,8 @@ class TestTriangle(object):
         return AB, AC, BC
 
     def do_pifagor_works(self, AB, AC, BC):
-        """Checks if Pythagorean theorem works with provided data.
+        """Check if Pythagorean theorem works with provided data.
+
         :param AB: len of side 1.
         :param AC: len of side 2.
         :param BC: len of side 3.
@@ -63,6 +69,7 @@ class TestTriangle(object):
 
     def find_angles(self, AB, AC, BC):
         """Find angles using cosine rule.
+
         :param AB: len of side 1.
         :param AC: len of side 2.
         :param BC: len of side 3.
@@ -92,8 +99,7 @@ class TestTriangle(object):
         return a_degr, b_degr, c_degr
 
     def test_is_right_triangle(self):
-        """Tests if provided coordinates belongs to the right triangle"""
-
+        """Test if provided coordinates belongs to the right triangle."""
         # generate coordinates
         coords = triangle_coordinates()
 
@@ -140,8 +146,7 @@ class TestTriangle(object):
             "Also there are no 90 degrees angle in this triangle")
 
     def test_find_coordinates_for_right_triangle(self):
-        """Find coordinates of a right triangle"""
-
+        """Find coordinates of a right triangle."""
         i = 0
         while True:
             i += 1
