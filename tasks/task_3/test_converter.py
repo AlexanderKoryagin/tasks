@@ -3,6 +3,7 @@
 
 import csv
 import os
+
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -201,9 +202,9 @@ class ConverterPage(Locators):
 
         assert (from_currency in self.currency_list and
                 to_currency in self.currency_list), (
-            "Provided currency [{0} -> {1}] is not in a list of available "
-            "variants: {2}".format(
-                from_currency, to_currency, self.currency_list))
+                    "Provided currency [{0} -> {1}] is not in a list of "
+                    "available variants: {2}".format(
+                        from_currency, to_currency, self.currency_list))
 
         convert_block = self._convert_block()
 
@@ -297,13 +298,13 @@ class TestConverter(ConverterPage):
         for param in self.read_csv():
             money, curr_from, curr_to = param
 
-            with pytest.allure.step(
-                    'Set value in converter: {0}'.format(money)):
+            step_name = 'Set value in converter: {0}'.format(money)
+            with pytest.allure.step(step_name):
                 self.set_num_to_convert(money)
 
-            with pytest.allure.step(
-                    'Set FROM [{0}] and TO [{1}]currency'.format(
-                        curr_from, curr_to)):
+            step_name = 'Set FROM [{0}] and TO [{1}]currency'.format(
+                curr_from, curr_to)
+            with pytest.allure.step(step_name):
                 self.set_currency_from_to(curr_from, curr_to)
 
             with pytest.allure.step('Click apply button'):
@@ -320,8 +321,8 @@ class TestConverter(ConverterPage):
                 assert str(money) in results
                 assert all(i in results for i in (curr_from, curr_to)), (
                     'Currency not in results: {0} -> {1}\n'
-                    'results: {2}'.format(curr_from, curr_to,
-                                          results.encode('utf-8')))
+                    'results: {2}'.format(
+                        curr_from, curr_to, results.encode('utf-8')))
 
     def test_inactive_radiobuttons_in_exchange_method_block(self):
         """Test that with some configuration some checkboxes became inactive.
@@ -356,7 +357,7 @@ class TestConverter(ConverterPage):
         with pytest.allure.step("Check that some elemens are not anabled"):
             assert all(i in inactve_elements_names
                        for i in not_active_boxes), (
-                "Some of the checkboxes are enabled")
+                           "Some of the checkboxes are enabled")
 
     def test_calendar_appears(self):
         """Test that date-picker calendar appears if 'select' time pressed.
@@ -374,7 +375,7 @@ class TestConverter(ConverterPage):
             assert not (self.time_block()['time_block'].
                         find_elements_by_css_selector(
                             self.locator_time_block_datepicker_css)), (
-                "Date-picker present, but it should not")
+                                "Date-picker present, but it should not")
 
         with pytest.allure.step("In time box select 'choose' time"):
             self.time_block()['radio_choose'].click()
@@ -383,4 +384,4 @@ class TestConverter(ConverterPage):
             assert (len(self.time_block()['time_block'].
                         find_elements_by_css_selector(
                             self.locator_time_block_datepicker_css)) == 1), (
-                "Date-picker does not present, but it should")
+                                "Date-picker does not present, but it should")

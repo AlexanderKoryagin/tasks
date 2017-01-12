@@ -135,8 +135,7 @@ class TestTriangle(object):
         print "Angles: A={angles[0]}, B={angles[1]}, C={angles[2]}".format(
             angles=[round(x, self.round_to) for x in angles])
 
-        assert (pifagor is True and
-                90 in angles), (
+        assert (pifagor is True and 90 in angles), (
             "\nAccording Pythagorean theorem this triangle is not right.\n"
             "Also there are no 90 degrees angle in this triangle")
 
@@ -178,5 +177,5 @@ class TestTriangle(object):
                 print "Point C = ({0}, {1})".format(coords['X3'], coords['Y3'])
                 print ("Angles: A={angles[0]}, B={angles[1]}, C={angles[2]}"
                        "".format(
-                            angles=[round(x, self.round_to) for x in angles]))
+                           angles=[round(x, self.round_to) for x in angles]))
                 break

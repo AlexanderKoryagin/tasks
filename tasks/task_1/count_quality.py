@@ -14,18 +14,19 @@ round_chars = 5
 
 def usage():
     """Prints usage"""
-    print ("\n{delim}\n"
-           "\nThis program will calculate quality of work of a classifier.\n"
-           "Usage:\n"
-           "\t{file} file1 file2\n"
-           "Where:\n"
-           "\tfile1 - File with test samples.\n"
-           "\tfile2 - File with correct answers for provided sample.\n"
-           "For example:\n"
-           "{file} ./data/LogisticRegression_pred.csv ./data/test_labels.csv\n"
-           "{file} ./data/NaiveBayes_pred.csv ./data/test_labels.csv\n"
-           "\n{delim}\n"
-           ).format(delim='-' * 40, file=__file__)
+    print (
+        "\n{delim}\n"
+        "\nThis program will calculate quality of work of a classifier.\n"
+        "Usage:\n"
+        "\t{file} file1 file2\n"
+        "Where:\n"
+        "\tfile1 - File with test samples.\n"
+        "\tfile2 - File with correct answers for provided sample.\n"
+        "For example:\n"
+        "{file} ./data/LogisticRegression_pred.csv ./data/test_labels.csv\n"
+        "{file} ./data/NaiveBayes_pred.csv ./data/test_labels.csv\n"
+        "\n{delim}\n"
+    ).format(delim='-' * 40, file=__file__)
 
 
 def get_args():

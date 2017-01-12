@@ -1,0 +1,12 @@
+# PyTest
+pytest
+
+# Debug
+ipdb
+IPython
+
+# Code check
+pylint
+flake8
+flake8_docstrings
+hacking
