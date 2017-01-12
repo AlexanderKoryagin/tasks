@@ -1,14 +1,13 @@
 ### This program will calculate quality of work of a classifier.
 ***
 
-
-Usage:
-1. Install local requirements in addition to [global requirements](../../README.md):
+#### Usage:
+* Install local requirements in addition to [global requirements](../../README.md):
 ```bash
 cd tasks/task_1
 pip install -U -r t1_requirements.txt
 ```
-2. Run tool:
+* Run tool:
 ```bash
 ./count_quality.py file1 file2
 ```
