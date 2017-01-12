@@ -1,7 +1,7 @@
 [flake8]
 
 # D104 Missing docstring in public package (in __init__.py)
-ignore = D104,
+ignore = D104
 
 exclude = .venv,
           __pycache__,
