@@ -26,6 +26,10 @@ pip install -U -r requirements.txt
 > virtualenv --clear .venv
 > .venv\Scripts\activate
 > pip install -U -r requirements.txt
+
+If you need proxy for CMD:
+set http_proxy=http://<proxy_IP>:<proxy_port>
+set https_proxy=http://<proxy_IP>:<proxy_port>
 ```
 To run *only* Code Style checks:
 ```bash
